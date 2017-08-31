@@ -63,8 +63,6 @@ app.listen(3000);
 - `successTrue` success set to true
 - `successFalse` success set to false
 
-For more info **about InCache** <a target="_blank" href="https://github.com/fabioricali/incache">click here</a>
-
 ## Changelog
 You can view the changelog <a target="_blank" href="https://github.com/fabioricali/koa-json-success/blob/master/CHANGELOG.md">here</a>
 
