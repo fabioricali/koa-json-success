@@ -7,7 +7,7 @@
     "version:major": "npm version major",
     "version:minor": "npm version minor",
     "version:patch": "npm version patch",
-    "postversion": "npm publish && git push && git push --tags",
+    "postversion": "npm publish && npm run-script doc && git push && git push --tags",
     "test": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "mocha.test": "mocha test",
     "doc": "jsdoc2md --no-gfm index.js > api.md"
