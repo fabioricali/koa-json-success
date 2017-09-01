@@ -53,8 +53,10 @@ KOA context
 
 * [~ctx](#ctx)
     * [.success](#ctx.success)
-    * [.successTrue([message], [result], [code])](#ctx.successTrue)
-    * [.successFalse([message], [result], [code])](#ctx.successFalse)
+    * [.successTrue](#ctx.successTrue)
+    * [.successFalse](#ctx.successFalse)
+    * [.successIf(result, [opts])](#ctx.successIf)
+    * [.successIfNotEmpty(result, [opts])](#ctx.successIfNotEmpty)
 
 <a name="ctx.success"></a>
 
@@ -84,12 +86,20 @@ Koa context method
     </tr>  </tbody>
 </table>
 
+**Example**  
+```js
+app.use(ctx => {     ctx.success(true, 'done', 'a result', 200);     // Response output example     {        "success": true,        "code": 200,        "message": "done",        "result": "a result",        "time": "0000-00-00T00:00:00.000Z"     }});
+```
+**Example**  
+```js
+app.use(ctx => {     ctx.success(false, 'ops...', null, 401);     // Response output example     {        "success": false,        "code": 401,        "message": "ops...",        "result": null,        "time": "0000-00-00T00:00:00.000Z"     }});
+```
 <a name="ctx.successTrue"></a>
 
-### ctx.successTrue([message], [result], [code])
+### ctx.successTrue
 This method respond as success to true
 
-**Kind**: static method of [<code>ctx</code>](#ctx)  
+**Kind**: static constant of [<code>ctx</code>](#ctx)  
 <table>
   <thead>
     <tr>
@@ -109,12 +119,24 @@ This method respond as success to true
     </tr>  </tbody>
 </table>
 
+**Example**  
+```js
+app.use(ctx => {     ctx.successTrue();     // Response output example     {        "success": true,        "code": 200,        "message": "ok",        "result": null,        "time": "0000-00-00T00:00:00.000Z"     }});
+```
+**Example**  
+```js
+app.use(ctx => {     ctx.successTrue('done');     // Response output example     {        "success": true,        "code": 200,        "message": "done",        "result": null,        "time": "0000-00-00T00:00:00.000Z"     }});
+```
+**Example**  
+```js
+app.use(ctx => {     ctx.successTrue('done', 'a result');     // Response output example     {        "success": true,        "code": 200,        "message": "done",        "result": "a result",        "time": "0000-00-00T00:00:00.000Z"     }});
+```
 <a name="ctx.successFalse"></a>
 
-### ctx.successFalse([message], [result], [code])
+### ctx.successFalse
 This method respond as success to false
 
-**Kind**: static method of [<code>ctx</code>](#ctx)  
+**Kind**: static constant of [<code>ctx</code>](#ctx)  
 <table>
   <thead>
     <tr>
@@ -134,3 +156,103 @@ This method respond as success to false
     </tr>  </tbody>
 </table>
 
+**Example**  
+```js
+app.use(ctx => {     ctx.successFalse();     // Response output example     {        "success": false,        "code": 200,        "message": "failed",        "result": null,        "time": "0000-00-00T00:00:00.000Z"     }});
+```
+**Example**  
+```js
+app.use(ctx => {     ctx.successFalse('ops...');     // Response output example     {        "success": false,        "code": 200,        "message": "ops...",        "result": null,        "time": "0000-00-00T00:00:00.000Z"     }});
+```
+**Example**  
+```js
+app.use(ctx => {     ctx.successFalse('ops...', false);     // Response output example     {        "success": false,        "code": 200,        "message": "ops...",        "result": false,        "time": "0000-00-00T00:00:00.000Z"     }});
+```
+<a name="ctx.successIf"></a>
+
+### ctx.successIf(result, [opts])
+Return success considering truthy or falsy of result param
+
+**Kind**: static method of [<code>ctx</code>](#ctx)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th><th>Default</th><th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>result</td><td><code>*</code></td><td></td><td><p>anythings like array, object, string, boolean...</p>
+</td>
+    </tr><tr>
+    <td>[opts]</td><td><code>Object</code></td><td></td><td><p>option configuration</p>
+</td>
+    </tr><tr>
+    <td>[opts.messageOk]</td><td><code>string</code></td><td><code>&quot;ok&quot;</code></td><td><p>&quot;ok&quot; message</p>
+</td>
+    </tr><tr>
+    <td>[opts.messageFailed]</td><td><code>string</code></td><td><code>&quot;failed&quot;</code></td><td><p>&quot;failed&quot; message</p>
+</td>
+    </tr><tr>
+    <td>[opts.codeOk]</td><td><code>number</code></td><td><code>200</code></td><td><p>status &quot;ok&quot; code</p>
+</td>
+    </tr><tr>
+    <td>[opts.codeFailed]</td><td><code>number</code></td><td><code>500</code></td><td><p>status &quot;failed&quot; code</p>
+</td>
+    </tr>  </tbody>
+</table>
+
+**Example**  
+```js
+// Falsy resultapp.use(ctx => {     const result = 0;     ctx.successIf(result);     // Response output example     {        "success": false,        "code": 500,        "message": "failed",        "result": 0,        "time": "0000-00-00T00:00:00.000Z"     }});
+```
+**Example**  
+```js
+// Truthy resultapp.use(ctx => {     const result = 123;     ctx.successIf(result);     // Response output example     {        "success": true,        "code": 200,        "message": "ok",        "result": 123,        "time": "0000-00-00T00:00:00.000Z"     }});
+```
+**Example**  
+```js
+// Use optionsapp.use(ctx => {     const result = 123;     ctx.successIf(result, {messageOk: 'all done'});     // Response output example     {        "success": true,        "code": 200,        "message": "all done",        "result": 123,        "time": "0000-00-00T00:00:00.000Z"     }});
+```
+<a name="ctx.successIfNotEmpty"></a>
+
+### ctx.successIfNotEmpty(result, [opts])
+Return success result is not empty
+
+**Kind**: static method of [<code>ctx</code>](#ctx)  
+<table>
+  <thead>
+    <tr>
+      <th>Param</th><th>Type</th><th>Default</th><th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+    <td>result</td><td><code>*</code></td><td></td><td><p>anythings like array, object, string, boolean...</p>
+</td>
+    </tr><tr>
+    <td>[opts]</td><td><code>Object</code></td><td></td><td><p>option configuration</p>
+</td>
+    </tr><tr>
+    <td>[opts.messageOk]</td><td><code>string</code></td><td><code>&quot;ok&quot;</code></td><td><p>&quot;ok&quot; message</p>
+</td>
+    </tr><tr>
+    <td>[opts.messageFailed]</td><td><code>string</code></td><td><code>&quot;failed&quot;</code></td><td><p>&quot;failed&quot; message</p>
+</td>
+    </tr><tr>
+    <td>[opts.codeOk]</td><td><code>number</code></td><td><code>200</code></td><td><p>status &quot;ok&quot; code</p>
+</td>
+    </tr><tr>
+    <td>[opts.codeFailed]</td><td><code>number</code></td><td><code>500</code></td><td><p>status &quot;failed&quot; code</p>
+</td>
+    </tr>  </tbody>
+</table>
+
+**Example**  
+```js
+// Empty resultapp.use(ctx => {     const result = [];     ctx.successIfNotEmpty(result);     // Response output example     {        "success": false,        "code": 500,        "message": "failed",        "result": 0,        "time": "0000-00-00T00:00:00.000Z"     }});
+```
+**Example**  
+```js
+// Not empty resultapp.use(ctx => {     const result = [1, 2, 3];     ctx.successIfNotEmpty(result);     // Response output example     {        "success": true,        "code": 200,        "message": "ok",        "result": 123,        "time": "0000-00-00T00:00:00.000Z"     }});
+```

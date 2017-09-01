@@ -14,7 +14,7 @@ JSON API response format for KOA 2
   "success": true,
   "message": "all done",
   "result": "anythings you want",
-  "time": "0000-00-00T00:00:00.000Z,
+  "time": "0000-00-00T00:00:00.000Z",
   "code": 200
 }
 ```
@@ -38,13 +38,13 @@ success(app);
 
 app.use(ctx=>{
     ctx.success(true);
-    /*// => 
+    /* Response output example 
     {
       "success": true,
       "code": 200,
       "message": "ok",
       "result": null,
-      "time": "0000-00-00T00:00:00.000Z
+      "time": "0000-00-00T00:00:00.000Z"
     }
     */
     
@@ -58,10 +58,15 @@ app.use(ctx=>{
 
 app.listen(3000);
 ```
-## API context
-- `success`
-- `successTrue` success set to true
-- `successFalse` success set to false
+
+### API
+- ctx.success
+- ctx.successTrue
+- ctx.successFalse
+- ctx.successIf
+- ctx.successIfNotEmpty
+
+**Please see <a href="https://github.com/fabioricali/koa-json-success/blob/master/api.md">full documentation</a>**
 
 ## Changelog
 You can view the changelog <a target="_blank" href="https://github.com/fabioricali/koa-json-success/blob/master/CHANGELOG.md">here</a>

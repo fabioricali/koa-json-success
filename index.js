@@ -1,5 +1,6 @@
 const type = require('typis');
 const defaulty = require('defaulty');
+const isEmpty = require('is-empty');
 
 /**
  * JSON response
@@ -65,6 +66,31 @@ function wrapperApp(app, opts = {}) {
      * @param [message] {string} message string
      * @param [result=null] {*} anythings like array, object, string, boolean...
      * @param [code=200] {number} status server code
+     * @example
+     * app.use(ctx => {
+     *      ctx.success(true, 'done', 'a result', 200);
+     *      // Response output example
+     *      {
+     *         "success": true,
+     *         "code": 200,
+     *         "message": "done",
+     *         "result": "a result",
+     *         "time": "0000-00-00T00:00:00.000Z"
+     *      }
+     * });
+     *
+     * @example
+     * app.use(ctx => {
+     *      ctx.success(false, 'ops...', null, 401);
+     *      // Response output example
+     *      {
+     *         "success": false,
+     *         "code": 401,
+     *         "message": "ops...",
+     *         "result": null,
+     *         "time": "0000-00-00T00:00:00.000Z"
+     *      }
+     * });
      */
     const success = app.context.success = function (success, message, result = null, code = 200) {
         if (!type.is(success, 'boolean'))
@@ -100,8 +126,46 @@ function wrapperApp(app, opts = {}) {
      * @param [message] {string} message string
      * @param [result] {*} anythings like array, object, string, boolean...
      * @param [code] {number} status server code
+     * @example
+     * app.use(ctx => {
+     *      ctx.successTrue();
+     *      // Response output example
+     *      {
+     *         "success": true,
+     *         "code": 200,
+     *         "message": "ok",
+     *         "result": null,
+     *         "time": "0000-00-00T00:00:00.000Z"
+     *      }
+     * });
+     *
+     * @example
+     * app.use(ctx => {
+     *      ctx.successTrue('done');
+     *      // Response output example
+     *      {
+     *         "success": true,
+     *         "code": 200,
+     *         "message": "done",
+     *         "result": null,
+     *         "time": "0000-00-00T00:00:00.000Z"
+     *      }
+     * });
+     *
+     * @example
+     * app.use(ctx => {
+     *      ctx.successTrue('done', 'a result');
+     *      // Response output example
+     *      {
+     *         "success": true,
+     *         "code": 200,
+     *         "message": "done",
+     *         "result": "a result",
+     *         "time": "0000-00-00T00:00:00.000Z"
+     *      }
+     * });
      */
-    app.context.successTrue = function (message, result, code) {
+    const successTrue = app.context.successTrue = function (message, result, code) {
         success.call(this, true, message, result, code);
     };
 
@@ -112,9 +176,174 @@ function wrapperApp(app, opts = {}) {
      * @param [message] {string} message string
      * @param [result] {*} anythings like array, object, string, boolean...
      * @param [code] {number} status server code
+     * @example
+     * app.use(ctx => {
+     *      ctx.successFalse();
+     *      // Response output example
+     *      {
+     *         "success": false,
+     *         "code": 200,
+     *         "message": "failed",
+     *         "result": null,
+     *         "time": "0000-00-00T00:00:00.000Z"
+     *      }
+     * });
+     *
+     * @example
+     * app.use(ctx => {
+     *      ctx.successFalse('ops...');
+     *      // Response output example
+     *      {
+     *         "success": false,
+     *         "code": 200,
+     *         "message": "ops...",
+     *         "result": null,
+     *         "time": "0000-00-00T00:00:00.000Z"
+     *      }
+     * });
+     *
+     * @example
+     * app.use(ctx => {
+     *      ctx.successFalse('ops...', false);
+     *      // Response output example
+     *      {
+     *         "success": false,
+     *         "code": 200,
+     *         "message": "ops...",
+     *         "result": false,
+     *         "time": "0000-00-00T00:00:00.000Z"
+     *      }
+     * });
      */
-    app.context.successFalse = function (message, result, code) {
+    const successFalse = app.context.successFalse = function (message, result, code) {
         success.call(this, false, message, result, code);
+    };
+
+    /**
+     * Return success considering truthy or falsy of result param
+     * @alias successIf
+     * @memberOf ctx
+     * @param result {*} anythings like array, object, string, boolean...
+     * @param [opts] {Object} option configuration
+     * @param [opts.messageOk=ok] {string} "ok" message
+     * @param [opts.messageFailed=failed] {string} "failed" message
+     * @param [opts.codeOk=200] {number} status "ok" code
+     * @param [opts.codeFailed=500] {number} status "failed" code
+     * @example
+     * // Falsy result
+     * app.use(ctx => {
+     *      const result = 0;
+     *      ctx.successIf(result);
+     *      // Response output example
+     *      {
+     *         "success": false,
+     *         "code": 500,
+     *         "message": "failed",
+     *         "result": 0,
+     *         "time": "0000-00-00T00:00:00.000Z"
+     *      }
+     * });
+     *
+     * @example
+     * // Truthy result
+     * app.use(ctx => {
+     *      const result = 123;
+     *      ctx.successIf(result);
+     *      // Response output example
+     *      {
+     *         "success": true,
+     *         "code": 200,
+     *         "message": "ok",
+     *         "result": 123,
+     *         "time": "0000-00-00T00:00:00.000Z"
+     *      }
+     * });
+     *
+     * @example
+     * // Use options
+     * app.use(ctx => {
+     *      const result = 123;
+     *      ctx.successIf(result, {messageOk: 'all done'});
+     *      // Response output example
+     *      {
+     *         "success": true,
+     *         "code": 200,
+     *         "message": "all done",
+     *         "result": 123,
+     *         "time": "0000-00-00T00:00:00.000Z"
+     *      }
+     * });
+     */
+    app.context.successIf = function (result, opts = {}) {
+
+        defaulty(opts, {
+            messageOk: 'ok',
+            messageFailed: 'failed',
+            codeOk: 200,
+            codeFailed: 500
+        });
+
+        if (result) {
+            successTrue.call(this, opts.messageOk, result, opts.codeOk);
+        } else {
+            successFalse.call(this, opts.messageFailed, result, opts.codeFailed);
+        }
+    };
+
+    /**
+     * Return success result is not empty
+     * @alias successIfNotEmpty
+     * @memberOf ctx
+     * @param result {*} anythings like array, object, string, boolean...
+     * @param [opts] {Object} option configuration
+     * @param [opts.messageOk=ok] {string} "ok" message
+     * @param [opts.messageFailed=failed] {string} "failed" message
+     * @param [opts.codeOk=200] {number} status "ok" code
+     * @param [opts.codeFailed=500] {number} status "failed" code
+     * @example
+     * // Empty result
+     * app.use(ctx => {
+     *      const result = [];
+     *      ctx.successIfNotEmpty(result);
+     *      // Response output example
+     *      {
+     *         "success": false,
+     *         "code": 500,
+     *         "message": "failed",
+     *         "result": 0,
+     *         "time": "0000-00-00T00:00:00.000Z"
+     *      }
+     * });
+     *
+     * @example
+     * // Not empty result
+     * app.use(ctx => {
+     *      const result = [1, 2, 3];
+     *      ctx.successIfNotEmpty(result);
+     *      // Response output example
+     *      {
+     *         "success": true,
+     *         "code": 200,
+     *         "message": "ok",
+     *         "result": 123,
+     *         "time": "0000-00-00T00:00:00.000Z"
+     *      }
+     * });
+     */
+    app.context.successIfNotEmpty = function (result, opts = {}) {
+
+        defaulty(opts, {
+            messageOk: 'ok',
+            messageFailed: 'failed',
+            codeOk: 200,
+            codeFailed: 500
+        });
+
+        if (!isEmpty(result)) {
+            successTrue.call(this, opts.messageOk, result, opts.codeOk);
+        } else {
+            successFalse.call(this, opts.messageFailed, result, opts.codeFailed);
+        }
     };
 }
 

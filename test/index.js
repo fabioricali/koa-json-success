@@ -343,4 +343,98 @@ describe('koa-json-success', function () {
                 });
         });
     });
+
+    describe('successIf', function () {
+        it('truthy result, should be return success true', function (done) {
+            const app = new koa();
+
+            success(app);
+
+            app.use(ctx => {
+                ctx.successIf([]);
+            });
+
+            request(app.listen())
+                .get('/')
+                .set('Accept', 'application/json')
+                .end((err, res) => {
+                    console.log(res.status);
+                    console.log(res.body);
+
+                    be.err.equal(res.body.code, 200);
+                    be.err.equal(res.body.message, 'ok');
+                    be.err.true(res.body.success);
+                    done();
+                });
+        });
+        it('falsy result, should be return success false', function (done) {
+            const app = new koa();
+
+            success(app);
+
+            app.use(ctx => {
+                ctx.successIf(0);
+            });
+
+            request(app.listen())
+                .get('/')
+                .set('Accept', 'application/json')
+                .end((err, res) => {
+                    console.log(res.status);
+                    console.log(res.body);
+
+                    be.err.equal(res.body.code, 500);
+                    be.err.equal(res.body.message, 'failed');
+                    be.err.false(res.body.success);
+                    done();
+                });
+        });
+    });
+
+    describe('successIfNotEmpty', function () {
+        it('empty result, should be return success false', function (done) {
+            const app = new koa();
+
+            success(app);
+
+            app.use(ctx => {
+                ctx.successIfNotEmpty([]);
+            });
+
+            request(app.listen())
+                .get('/')
+                .set('Accept', 'application/json')
+                .end((err, res) => {
+                    console.log(res.status);
+                    console.log(res.body);
+
+                    be.err.equal(res.body.code, 500);
+                    be.err.equal(res.body.message, 'failed');
+                    be.err.false(res.body.success);
+                    done();
+                });
+        });
+        it('not empty result, should be return success true', function (done) {
+            const app = new koa();
+
+            success(app);
+
+            app.use(ctx => {
+                ctx.successIfNotEmpty(['hello']);
+            });
+
+            request(app.listen())
+                .get('/')
+                .set('Accept', 'application/json')
+                .end((err, res) => {
+                    console.log(res.status);
+                    console.log(res.body);
+
+                    be.err.equal(res.body.code, 200);
+                    be.err.equal(res.body.message, 'ok');
+                    be.err.true(res.body.success);
+                    done();
+                });
+        });
+    });
 });
