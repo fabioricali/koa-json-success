@@ -37,6 +37,12 @@ Wrapper method
     </tr><tr>
     <td>[opts.onFalse]</td><td><code>function</code></td><td><code></code></td><td><p>callback on false success</p>
 </td>
+    </tr><tr>
+    <td>[opts.callbackQuery]</td><td><code>string</code></td><td><code>&quot;callback&quot;</code></td><td><p>JSONP callback query param</p>
+</td>
+    </tr><tr>
+    <td>[opts.callbackName]</td><td><code>string</code></td><td><code>&quot;cb&quot;</code></td><td><p>JSONP callback function name</p>
+</td>
     </tr>  </tbody>
 </table>
 
