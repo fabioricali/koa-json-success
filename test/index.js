@@ -28,6 +28,27 @@ describe('koa-json-success', function () {
                 });
         });
 
+        it('JSONP should be return: success true, status code 200', function (done) {
+            const app = new koa();
+
+            success(app);
+
+            app.use(ctx => {
+                ctx.success(true, 'done', 'hello');
+            });
+
+            request(app.listen())
+                .get('/?callback=cb')
+                .set('Accept', 'application/json')
+                .end((err, res) => {
+                    console.log(res.text);
+                    be.err.empty(res.body);
+                    be.err.equal(res.status, 200);
+                    be.err.contains(res.text, 'cb({');
+                    done();
+                });
+        });
+
         it('with callback onTrue should be return: success true, status code 200', function (done) {
             const app = new koa();
 
