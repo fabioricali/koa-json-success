@@ -356,6 +356,30 @@ function wrapperApp(app, opts = {}) {
             successFalse.call(this, opts.messageFailed, result, opts.codeFailed);
         }
     };
+
+    app.context.success400 = function (msg) {
+        successFalse.call(this, msg, null, 400);
+    };
+
+    app.context.success401 = function (msg) {
+        successFalse.call(this, msg, null, 401);
+    };
+
+    app.context.success402 = function (msg) {
+        successFalse.call(this, msg, null, 402);
+    };
+
+    app.context.success403 = function (msg) {
+        successFalse.call(this, msg, null, 403);
+    };
+
+    app.context.success404 = function (msg) {
+        successFalse.call(this, msg, null, 404);
+    };
+
+    app.context.success405 = function (msg) {
+        successFalse.call(this, msg, null, 405);
+    };
 }
 
 module.exports = wrapperApp;
