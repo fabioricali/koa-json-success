@@ -44,6 +44,6 @@
   "dependencies": {
     "defaulty": "^1.2.1",
     "is-empty": "^1.2.0",
-    "typis": "^1.0.2"
+    "typis": "^1.1.1"
   }
 }
