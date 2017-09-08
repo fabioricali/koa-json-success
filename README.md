@@ -6,6 +6,7 @@ JSON API response format for KOA 2
 <a href="https://coveralls.io/github/fabioricali/koa-json-success?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/fabioricali/koa-json-success/badge.svg?branch=master" title="Coverage Status"/></a>
 <a href="https://opensource.org/licenses/MIT" target="_blank"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" title="License: MIT"/></a>
 <img src="https://img.shields.io/badge/team-terrons-orange.svg" title="Team Terrons"/>
+<a target="_blank" href="https://github.com/fabioricali/JSON-Success-Response"><img src="https://img.shields.io/badge/JSON-Success%20Response-green.svg" title="JSON Success Response"/></a>
 </div>
 
 #### This module creates a JSON response such as the following.
