@@ -8,16 +8,17 @@ JSON API response format for KOA 2
 <img src="https://img.shields.io/badge/team-terrons-orange.svg" title="Team Terrons"/>
 </div>
 
-#### This module creates a JSON response such as the following
+#### This module creates a JSON response such as the following.
 ```json
 {
   "success": true,
   "message": "all done",
   "result": "anythings you want",
-  "time": "0000-00-00T00:00:00.000Z",
+  "time": "2017-08-30T09:59:00.846Z",
   "code": 200
 }
 ```
+ More info on <a target="_blank" href="https://github.com/fabioricali/JSON-Success-Response">JSON Success Response</a>
 
 ## Installation
 
@@ -44,7 +45,7 @@ app.use(ctx=>{
       "code": 200,
       "message": "ok",
       "result": null,
-      "time": "0000-00-00T00:00:00.000Z"
+      "time": "2017-08-30T09:59:00.846Z"
     }
     */
     
@@ -60,11 +61,52 @@ app.listen(3000);
 ```
 
 ### API
-- ctx.success
-- ctx.successTrue
-- ctx.successFalse
-- ctx.successIf
-- ctx.successIfNotEmpty
+- `success(success, [message], [result], [code])`
+- `successTrue([message], [result], [code])`
+- `successFalse([message], [result], [code])`
+- `successIf(result, [opts])`
+- `successIfNotEmpty(result, [opts])`
+- `success400([message], [result])`
+- `success401([message], [result])`
+- `success402([message], [result])`
+- `success403([message], [result])`
+- `success404([message], [result])`
+- `success405([message], [result])`
+- `success406([message], [result])`
+- `success407([message], [result])`
+- `success408([message], [result])`
+- `success409([message], [result])`
+- `success410([message], [result])`
+- `success411([message], [result])`
+- `success412([message], [result])`
+- `success413([message], [result])`
+- `success414([message], [result])`
+- `success415([message], [result])`
+- `success416([message], [result])`
+- `success417([message], [result])`
+- `success418([message], [result])`
+- `success417([message], [result])`
+- `success421([message], [result])`
+- `success422([message], [result])`
+- `success423([message], [result])`
+- `success424([message], [result])`
+- `success425([message], [result])`
+- `success426([message], [result])`
+- `success428([message], [result])`
+- `success429([message], [result])`
+- `success431([message], [result])`
+- `success500([message], [result])`
+- `success501([message], [result])`
+- `success502([message], [result])`
+- `success503([message], [result])`
+- `success504([message], [result])`
+- `success505([message], [result])`
+- `success506([message], [result])`
+- `success507([message], [result])`
+- `success508([message], [result])`
+- `success509([message], [result])`
+- `success510([message], [result])`
+- `success511([message], [result])`
 
 **Please see <a href="https://github.com/fabioricali/koa-json-success/blob/master/api.md">full documentation</a>**
 

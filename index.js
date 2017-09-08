@@ -1,6 +1,7 @@
 const type = require('typis');
 const defaulty = require('defaulty');
 const isEmpty = require('is-empty');
+const STATUS_CODES = require('http').STATUS_CODES;
 
 /**
  * JSON response
@@ -64,6 +65,7 @@ function wrapperApp(app, opts = {}) {
 
     /**
      * Koa context method
+     * @function
      * @alias success
      * @memberOf ctx
      * @param success {boolean} response success
@@ -132,6 +134,7 @@ function wrapperApp(app, opts = {}) {
 
     /**
      * This method respond as success to true
+     * @function
      * @alias successTrue
      * @memberOf ctx
      * @param [message] {string} message string
@@ -182,6 +185,7 @@ function wrapperApp(app, opts = {}) {
 
     /**
      * This method respond as success to false
+     * @function
      * @alias successFalse
      * @memberOf ctx
      * @param [message] {string} message string
@@ -232,6 +236,7 @@ function wrapperApp(app, opts = {}) {
 
     /**
      * Return success considering truthy or falsy of result param
+     * @function
      * @alias successIf
      * @memberOf ctx
      * @param result {*} anythings like array, object, string, boolean...
@@ -303,6 +308,7 @@ function wrapperApp(app, opts = {}) {
 
     /**
      * Return success result is not empty
+     * @function
      * @alias successIfNotEmpty
      * @memberOf ctx
      * @param result {*} anythings like array, object, string, boolean...
@@ -357,29 +363,261 @@ function wrapperApp(app, opts = {}) {
         }
     };
 
-    app.context.success400 = function (msg) {
-        successFalse.call(this, msg, null, 400);
-    };
-
-    app.context.success401 = function (msg) {
-        successFalse.call(this, msg, null, 401);
-    };
-
-    app.context.success402 = function (msg) {
-        successFalse.call(this, msg, null, 402);
-    };
-
-    app.context.success403 = function (msg) {
-        successFalse.call(this, msg, null, 403);
-    };
-
-    app.context.success404 = function (msg) {
-        successFalse.call(this, msg, null, 404);
-    };
-
-    app.context.success405 = function (msg) {
-        successFalse.call(this, msg, null, 405);
-    };
+    for(let code in STATUS_CODES){
+        /* istanbul ignore else  */
+        if(STATUS_CODES.hasOwnProperty(code)) {
+            code = Number(code);
+            app.context[`success${code}`] = function (message = STATUS_CODES[code], result = null) {
+                success.call(this, code < 400 , message, result, code);
+            };
+        }
+    }
+    /**
+     * @function success400
+     * @memberOf ctx
+     * @param [message=Bad Request] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success401
+     * @memberOf ctx
+     * @param [message=Unauthorized] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success402
+     * @memberOf ctx
+     * @param [message=Payment Required] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success403
+     * @memberOf ctx
+     * @param [message=Forbidden] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success404
+     * @memberOf ctx
+     * @param [message=Not Found] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success405
+     * @memberOf ctx
+     * @param [message=Method Not Allowed] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success406
+     * @memberOf ctx
+     * @param [message=Not Acceptable] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success407
+     * @memberOf ctx
+     * @param [message=Proxy Authentication Required] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success408
+     * @memberOf ctx
+     * @param [message=Request Timeout] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success409
+     * @memberOf ctx
+     * @param [message=Conflict] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success410
+     * @memberOf ctx
+     * @param [message=Gone] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success411
+     * @memberOf ctx
+     * @param [message=Length Required] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success412
+     * @memberOf ctx
+     * @param [message=Precondition Failed] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success413
+     * @memberOf ctx
+     * @param [message=Payload Too Large] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success414
+     * @memberOf ctx
+     * @param [message=URI Too Long] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success415
+     * @memberOf ctx
+     * @param [message=Unsupported Media Type] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success416
+     * @memberOf ctx
+     * @param [message=Range Not Satisfiable] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success417
+     * @memberOf ctx
+     * @param [message=Expectation Failed] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success418
+     * @memberOf ctx
+     * @param [message=I'm a teapot] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success417
+     * @memberOf ctx
+     * @param [message=Expectation Failed] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success421
+     * @memberOf ctx
+     * @param [message=Misdirected Request] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success422
+     * @memberOf ctx
+     * @param [message=Unprocessable Entity] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success423
+     * @memberOf ctx
+     * @param [message=Locked] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success424
+     * @memberOf ctx
+     * @param [message=Failed Dependency] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success425
+     * @memberOf ctx
+     * @param [message=Unordered Collection] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success426
+     * @memberOf ctx
+     * @param [message=Upgrade Required] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success428
+     * @memberOf ctx
+     * @param [message=Precondition Required] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success429
+     * @memberOf ctx
+     * @param [message=Too Many Requests] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success431
+     * @memberOf ctx
+     * @param [message=Request Header Fields Too Large] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success500
+     * @memberOf ctx
+     * @param [message=Internal Server Error] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success501
+     * @memberOf ctx
+     * @param [message=Not Implemented] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success502
+     * @memberOf ctx
+     * @param [message=Bad Gateway] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success503
+     * @memberOf ctx
+     * @param [message=Service Unavailable] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success504
+     * @memberOf ctx
+     * @param [message=Gateway Timeout] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success505
+     * @memberOf ctx
+     * @param [message=HTTP Version Not Supported] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success506
+     * @memberOf ctx
+     * @param [message=Variant Also Negotiates] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success507
+     * @memberOf ctx
+     * @param [message=Insufficient Storage] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success508
+     * @memberOf ctx
+     * @param [message=Loop Detected] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success509
+     * @memberOf ctx
+     * @param [message=Bandwidth Limit Exceeded] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success510
+     * @memberOf ctx
+     * @param [message=Not Extended] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
+    /**
+     * @function success511
+     * @memberOf ctx
+     * @param [message=Network Authentication Required] {string} message string
+     * @param [result] {*} anythings like array, object, string, boolean...
+     */
 }
 
 module.exports = wrapperApp;
