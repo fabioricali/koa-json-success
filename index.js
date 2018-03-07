@@ -32,7 +32,7 @@ function responseJSON(success, message, result = null, code) {
  * @param [opts.onTrue=null] {Function} callback on true success
  * @param [opts.onFalse=null] {Function} callback on false success
  * @param [opts.callbackQuery=callback] {string} JSONP callback query param
- * @param [opts.callbackName=cb] {string} JSONP callback function name
+ * @param [opts.allowCallback=true] {boolean} allow JSONP
  * @example
  * const koa = require('koa');
  * const success = require('koa-json-success');
@@ -50,7 +50,7 @@ function wrapperApp(app, opts = {}) {
         defaultFailed: 'failed',
         onTrue: null,
         onFalse: null,
-        callbackName: 'cb',
+        allowCallback: true,
         callbackQuery: 'callback'
     };
 
@@ -124,9 +124,8 @@ function wrapperApp(app, opts = {}) {
         this.status = code;
         let response = responseJSON.apply(this, args);
 
-        if(opts.callbackName && type.is(opts.callbackName, 'string') && this.query[opts.callbackQuery]
-            && this.query[opts.callbackQuery] === opts.callbackName) {
-            response = `${opts.callbackName}(${JSON.stringify(response)})`;
+        if(opts.allowCallback && this.query[opts.callbackQuery]) {
+            response = `${this.query[opts.callbackQuery]}(${JSON.stringify(response)})`;
         }
 
         this.body = response;
