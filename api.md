@@ -41,7 +41,7 @@ Wrapper method
     <td>[opts.callbackQuery]</td><td><code>string</code></td><td><code>&quot;callback&quot;</code></td><td><p>JSONP callback query param</p>
 </td>
     </tr><tr>
-    <td>[opts.callbackName]</td><td><code>string</code></td><td><code>&quot;cb&quot;</code></td><td><p>JSONP callback function name</p>
+    <td>[opts.allowCallback]</td><td><code>boolean</code></td><td><code>true</code></td><td><p>allow JSONP</p>
 </td>
     </tr>  </tbody>
 </table>
