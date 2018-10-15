@@ -129,6 +129,8 @@ function wrapperApp(app, opts = {}) {
         }
 
         this.body = response;
+
+        return response;
     };
 
     /**
@@ -179,7 +181,7 @@ function wrapperApp(app, opts = {}) {
      * });
      */
     const successTrue = app.context.successTrue = function (message, result, code) {
-        success.call(this, true, message, result, code);
+        return success.call(this, true, message, result, code);
     };
 
     /**
@@ -230,7 +232,7 @@ function wrapperApp(app, opts = {}) {
      * });
      */
     const successFalse = app.context.successFalse = function (message, result, code) {
-        success.call(this, false, message, result, code);
+        return success.call(this, false, message, result, code);
     };
 
     /**
@@ -299,9 +301,9 @@ function wrapperApp(app, opts = {}) {
         });
 
         if (result) {
-            successTrue.call(this, opts.messageOk, result, opts.codeOk);
+            return successTrue.call(this, opts.messageOk, result, opts.codeOk);
         } else {
-            successFalse.call(this, opts.messageFailed, result, opts.codeFailed);
+            return successFalse.call(this, opts.messageFailed, result, opts.codeFailed);
         }
     };
 
@@ -356,9 +358,9 @@ function wrapperApp(app, opts = {}) {
         });
 
         if (!isEmpty(result)) {
-            successTrue.call(this, opts.messageOk, result, opts.codeOk);
+            return successTrue.call(this, opts.messageOk, result, opts.codeOk);
         } else {
-            successFalse.call(this, opts.messageFailed, result, opts.codeFailed);
+            return successFalse.call(this, opts.messageFailed, result, opts.codeFailed);
         }
     };
 
@@ -367,7 +369,7 @@ function wrapperApp(app, opts = {}) {
         if(STATUS_CODES.hasOwnProperty(code)) {
             code = Number(code);
             app.context[`success${code}`] = function (message = STATUS_CODES[code], result = null) {
-                success.call(this, code < 400 , message, result, code);
+                return success.call(this, code < 400 , message, result, code);
             };
         }
     }
