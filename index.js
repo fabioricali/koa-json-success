@@ -125,6 +125,7 @@ function wrapperApp(app, opts = {}) {
         let response = responseJSON.apply(this, args);
 
         if(opts.allowCallback && this.query[opts.callbackQuery]) {
+            this.response.set('Content-Type', 'application/javascript');
             response = `${this.query[opts.callbackQuery]}(${JSON.stringify(response)})`;
         }
 
