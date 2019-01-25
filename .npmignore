@@ -1,5 +1,6 @@
-.ide/
+.idea/
 node_modules/
 test/
 .koa-incache
 .travis.yml
+coverage/
