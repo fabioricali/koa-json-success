@@ -122,6 +122,8 @@ function wrapperApp(app, opts = {}) {
             opts.onFalse.apply(this, args.slice(1));
 
         this.status = code;
+        this.message = message;
+
         let response = responseJSON.apply(this, args);
 
         if(opts.allowCallback && this.query[opts.callbackQuery]) {
